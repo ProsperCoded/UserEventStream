@@ -2,7 +2,57 @@
   "$schema": "https://json.schemastore.org/nest-cli",
   "collection": "@nestjs/schematics",
   "sourceRoot": "src",
+  "monorepo": true,
+  "root": ".",
   "compilerOptions": {
+    "webpack": true,
     "deleteOutDir": true
+  },
+  "projects": {
+    "producer-api": {
+      "type": "application",
+      "root": "apps/producer-api",
+      "entryFile": "main",
+      "sourceRoot": "apps/producer-api/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/producer-api/tsconfig.app.json"
+      }
+    },
+    "analytics-service": {
+      "type": "application",
+      "root": "apps/analytics-service",
+      "entryFile": "main",
+      "sourceRoot": "apps/analytics-service/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/analytics-service/tsconfig.app.json"
+      }
+    },
+    "notification-service": {
+      "type": "application",
+      "root": "apps/notification-service",
+      "entryFile": "main",
+      "sourceRoot": "apps/notification-service/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/notification-service/tsconfig.app.json"
+      }
+    },
+    "fraud-detection-service": {
+      "type": "application",
+      "root": "apps/fraud-detection-service",
+      "entryFile": "main",
+      "sourceRoot": "apps/fraud-detection-service/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/fraud-detection-service/tsconfig.app.json"
+      }
+    },
+    "shared": {
+      "type": "library",
+      "root": "libs/shared",
+      "entryFile": "index",
+      "sourceRoot": "libs/shared/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/shared/tsconfig.lib.json"
+      }
+    }
   }
 }
