@@ -59,6 +59,7 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: user
       MONGO_INITDB_ROOT_PASSWORD: password
+    command: ['--quiet', '--logpath', '/dev/null']
     volumes:
       - mongodb_data:/data/db
     healthcheck:
