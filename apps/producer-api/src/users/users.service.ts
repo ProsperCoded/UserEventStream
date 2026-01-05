@@ -55,18 +55,23 @@ export class UsersService {
     return newUser;
   }
 
-  async login(email: string, ip: string, userAgent: string) {
+  async login(email: string, password: string, ip: string, userAgent: string) {
     const user = await this.db.query.users.findFirst({
       where: eq(users.email, email),
     });
 
     if (!user) {
-      // Potentially emit login failed with unknown user? Or just return
-      // Security: don't reveal user existence. But for events:
-      // Can't emit user.login_failed with valid aggregateId if user doesn't exist.
-      // Could allow email as aggregateID for failures? PRD says aggregateID is userId.
-      // If user not found, maybe skip event or use a placeholder?
-      // "user.login_failed" usually implies we found the user but password wrong.
+      // User not found, generally silent or generic failure
+      return null;
+    }
+
+    // Verify Password (Mock hash check)
+    if (user.passwordHash !== password) {
+      this.emitEvent(UserEventType.USER_LOGIN_FAILED, user.id, {
+        ip,
+        userAgent,
+        reason: 'Invalid password',
+      });
       return null;
     }
 
@@ -89,5 +94,13 @@ export class UsersService {
 
   async logout(userId: string) {
     this.emitEvent(UserEventType.USER_LOGGED_OUT, userId, {});
+  }
+
+  async changePassword(userId: string, newPasswordHash: string) {
+    await this.db
+      .update(users)
+      .set({ passwordHash: newPasswordHash })
+      .where(eq(users.id, userId));
+    this.emitEvent(UserEventType.USER_PASSWORD_CHANGED, userId, {});
   }
 }

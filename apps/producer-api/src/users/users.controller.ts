@@ -5,6 +5,7 @@ import {
   Param,
   NotFoundException,
   InternalServerErrorException,
+  Patch,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 
@@ -27,17 +28,33 @@ export class UsersController {
 
   @Post('login')
   async login(
-    @Body() body: { email: string; ip?: string; userAgent?: string },
+    @Body()
+    body: {
+      email: string;
+      password?: string;
+      ip?: string;
+      userAgent?: string;
+    },
   ) {
     // In real app, extract IP/UA from request headers. Here accepting from body for easy testing.
     const ip = body.ip || '127.0.0.1';
     const ua = body.userAgent || 'curl';
+    const password = body.password || '';
 
-    const user = await this.usersService.login(body.email, ip, ua);
+    const user = await this.usersService.login(body.email, password, ip, ua);
     if (!user) {
-      throw new NotFoundException('User not found');
+      throw new NotFoundException('Invalid credentials');
     }
     return { message: 'Logged in', userId: user.id };
+  }
+
+  @Patch(':id/password')
+  async changePassword(
+    @Param('id') id: string,
+    @Body() body: { password: string },
+  ) {
+    await this.usersService.changePassword(id, body.password);
+    return { message: 'Password changed' };
   }
 
   @Post(':id/logout')
