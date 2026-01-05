@@ -32,6 +32,21 @@ services:
     networks:
       - user-event-stream-net
 
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    container_name: kafka-ui
+    ports:
+      - '8080:8080'
+    depends_on:
+      kafka:
+        condition: service_healthy
+    environment:
+      KAFKA_CLUSTERS_0_NAME: local
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9092
+      DYNAMIC_CONFIG_ENABLED: 'true'
+    networks:
+      - user-event-stream-net
+
   postgres:
     image: postgis/postgis
     container_name: postgres
@@ -88,6 +103,7 @@ services:
       DATABASE_USER: user
       DATABASE_PASSWORD: password
       DATABASE_NAME: user_event_stream
+    command: sh -c "npx drizzle-kit push && node dist/apps/producer-api/main"
     ports:
       - '3000:3000'
     networks:
