@@ -1,10 +1,16 @@
-FROM node:18-alpine
+# FROM node:18-alpine
+FROM node:20-slim
+
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+RUN corepack enable
 
 WORKDIR /usr/src/app
 
-COPY package*.json ./
+COPY package.json pnpm-lock.yaml ./
 
-RUN npm install
+# Note: --prefer-offline is for development, should change to --frozen-lockfile for production
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --prefer-offline
 
 COPY . .
 
