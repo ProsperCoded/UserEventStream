@@ -51,7 +51,7 @@ services:
     image: postgis/postgis
     container_name: postgres
     ports:
-      - '5432:5432'
+      - '5433:5432'
     environment:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
@@ -95,6 +95,8 @@ services:
       kafka:
         condition: service_healthy
       postgres:
+        condition: service_healthy
+      notification-service:
         condition: service_healthy
     environment:
       KAFKA_BROKERS: kafka:9092

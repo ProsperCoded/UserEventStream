@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 
 export const API_URL = 'http://localhost:3000';
 export const POSTGRES_CONN =
-  'postgres://user:password@localhost:5432/user_event_stream';
+  'postgres://user:password@localhost:5433/user_event_stream';
 export const MONGO_URI =
   'mongodb://user:password@localhost:27017/user_event_stream';
 
