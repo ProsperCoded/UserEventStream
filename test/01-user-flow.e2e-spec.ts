@@ -1,4 +1,4 @@
-import { SmartSeeder } from '../../scripts/smart-seed';
+import { SmartSeeder } from './utils/smart-seed';
 import { TestContext, API_URL } from './test-context';
 
 describe('User Flow E2E', () => {

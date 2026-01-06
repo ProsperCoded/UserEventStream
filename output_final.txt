@@ -1,0 +1,5 @@
+
+> user-event-stream-platform@0.0.1 test:e2e
+> jest --config ./test/jest-e2e.json
+
+Terminate batch job (Y/N)? 

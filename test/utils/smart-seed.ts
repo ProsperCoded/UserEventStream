@@ -13,7 +13,7 @@ export class SmartSeeder {
         password,
       });
       return { id: res.data.id, email: userEmail, password };
-    } catch (e) {
+    } catch (e: any) {
       console.error('Create User API Error:', e.response?.data || e.message);
       throw e;
     }
@@ -38,7 +38,7 @@ export class SmartSeeder {
         userAgent: faker.internet.userAgent(),
       });
       return res.data;
-    } catch (e) {
+    } catch (e: any) {
       throw e; // Check caller for handling 401/404
     }
   }
