@@ -1,5 +1,6 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { ClientKafka } from '@nestjs/microservices';
+import { lastValueFrom } from 'rxjs';
 import { NodePgDatabase } from 'drizzle-orm/node-postgres';
 import { DRIZZLE } from '../database/database.module';
 import { users } from '../database/schema';
@@ -20,7 +21,7 @@ export class UsersService {
     await this.kafkaClient.connect();
   }
 
-  private emitEvent(
+  private async emitEvent(
     eventType: UserEventType,
     aggregateId: string,
     payload: any,
@@ -34,11 +35,14 @@ export class UsersService {
       payload,
     };
 
-    // Emit to 'user.events' topic
-    this.kafkaClient.emit('user.events', {
-      key: aggregateId, // Partition key
-      value: event, // Payload
-    });
+    // Emit to 'user.events' topic and wait for acknowledgement
+    // This ensures message ordering by waiting for each message to be sent
+    await lastValueFrom(
+      this.kafkaClient.emit('user.events', {
+        key: aggregateId, // Partition key
+        value: event, // Payload
+      }),
+    );
   }
 
   async createUser(email: string, passwordHash: string) {
@@ -51,7 +55,7 @@ export class UsersService {
       })
       .returning();
 
-    this.emitEvent(UserEventType.USER_CREATED, newUser.id, { email });
+    await this.emitEvent(UserEventType.USER_CREATED, newUser.id, { email });
     return newUser;
   }
 
@@ -67,7 +71,7 @@ export class UsersService {
 
     // Verify Password (Mock hash check)
     if (user.passwordHash !== password) {
-      this.emitEvent(UserEventType.USER_LOGIN_FAILED, user.id, {
+      await this.emitEvent(UserEventType.USER_LOGIN_FAILED, user.id, {
         ip,
         userAgent,
         reason: 'Invalid password',
@@ -81,19 +85,22 @@ export class UsersService {
         .update(users)
         .set({ lastIpAddress: ip })
         .where(eq(users.id, user.id));
-      this.emitEvent(UserEventType.USER_IP_CHANGED, user.id, {
+      await this.emitEvent(UserEventType.USER_IP_CHANGED, user.id, {
         ip,
         previousIp: user.lastIpAddress,
       });
     }
 
     // Emit Logged In
-    this.emitEvent(UserEventType.USER_LOGGED_IN, user.id, { ip, userAgent });
+    await this.emitEvent(UserEventType.USER_LOGGED_IN, user.id, {
+      ip,
+      userAgent,
+    });
     return user;
   }
 
   async logout(userId: string) {
-    this.emitEvent(UserEventType.USER_LOGGED_OUT, userId, {});
+    await this.emitEvent(UserEventType.USER_LOGGED_OUT, userId, {});
   }
 
   async changePassword(userId: string, newPasswordHash: string) {
@@ -101,6 +108,6 @@ export class UsersService {
       .update(users)
       .set({ passwordHash: newPasswordHash })
       .where(eq(users.id, userId));
-    this.emitEvent(UserEventType.USER_PASSWORD_CHANGED, userId, {});
+    await this.emitEvent(UserEventType.USER_PASSWORD_CHANGED, userId, {});
   }
 }

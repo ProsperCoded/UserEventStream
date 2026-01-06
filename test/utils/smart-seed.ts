@@ -43,8 +43,12 @@ export class SmartSeeder {
         ip,
         userAgent: faker.internet.userAgent(),
       });
+      console.log(
+        `[SmartSeeder] Login success for ${email}. Status: ${res.status}`,
+      );
       return res.data;
     } catch (e: any) {
+      console.error(`[SmartSeeder] Login failed for ${email}: ${e.message}`);
       // Sanitize error to avoid circular reference (req -> res -> req)
       const sanitizedError = new Error(
         e.response?.data?.message || e.message || 'Login failed',

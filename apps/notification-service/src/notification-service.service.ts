@@ -1,7 +1,11 @@
 import { Injectable, Logger } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import {
+  Notification,
+  NotificationDocument,
+} from './schemas/notification.schema';
 import { UserEvent, UserEventType } from '@app/shared';
-import * as fs from 'fs';
-import * as path from 'path';
 
 @Injectable()
 export class NotificationService {
@@ -11,10 +15,11 @@ export class NotificationService {
     string,
     { count: number; timestamp: number }
   >();
-  private readonly LOG_FILE_PATH = path.join(
-    process.cwd(),
-    'notifications.log',
-  );
+
+  constructor(
+    @InjectModel(Notification.name)
+    private notificationModel: Model<NotificationDocument>,
+  ) {}
 
   async processEvent(event: UserEvent) {
     if (this.processedEvents.has(event.eventId)) {
@@ -22,7 +27,6 @@ export class NotificationService {
       return;
     }
     this.processedEvents.add(event.eventId);
-    // Prune set to avoid memory leak? For demo, okay.
 
     const { eventType, payload, aggregateId } = event;
     let message = '';
@@ -38,16 +42,16 @@ export class NotificationService {
         message = `Security Alert: User ${aggregateId} logged in from new IP ${payload.ip}.`;
         break;
       case UserEventType.USER_LOGIN_FAILED:
-        this.handleLoginFailure(aggregateId);
+        await this.handleLoginFailure(aggregateId);
         break;
     }
 
     if (message) {
-      this.sendNotification(aggregateId, message);
+      await this.sendNotification(aggregateId, message);
     }
   }
 
-  private handleLoginFailure(userId: string) {
+  private async handleLoginFailure(userId: string) {
     const now = Date.now();
     const record = this.loginFailures.get(userId) || {
       count: 0,
@@ -64,24 +68,24 @@ export class NotificationService {
     this.loginFailures.set(userId, record);
 
     if (record.count >= 3) {
-      // Threshold
-      this.sendNotification(
+      await this.sendNotification(
         userId,
         `Warning: ${record.count} failed login attempts detected.`,
       );
-      // Reset or keep alerting?
     }
   }
 
-  private sendNotification(userId: string, message: string) {
-    const logEntry = `[${new Date().toISOString()}] [USER:${userId}] ${message}\n`;
+  private async sendNotification(userId: string, message: string) {
     this.logger.log(`SENDING NOTIFICATION to [USER: ${userId}]: ${message}`);
 
-    // Append to log file
     try {
-      fs.appendFileSync(this.LOG_FILE_PATH, logEntry);
+      await this.notificationModel.create({
+        userId,
+        message,
+        sentAt: new Date(),
+      });
     } catch (e) {
-      this.logger.error('Failed to write to notification log', e);
+      this.logger.error('Failed to save notification to DB', e);
     }
   }
 }

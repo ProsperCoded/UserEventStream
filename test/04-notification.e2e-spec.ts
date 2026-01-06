@@ -1,6 +1,5 @@
 import { SmartSeeder } from './utils/smart-seed';
 import { TestContext, API_URL } from './test-context';
-import { execSync } from 'child_process';
 
 describe('Notification E2E', () => {
   const context = new TestContext();
@@ -18,17 +17,18 @@ describe('Notification E2E', () => {
     const user = await seeder.createUser();
 
     // Wait for async processing
-    await new Promise((r) => setTimeout(r, 3000));
+    await new Promise((r) => setTimeout(r, 5000));
 
-    // Verify Log
-    try {
-      const logs = execSync(
-        'docker exec notification-service-1 cat notifications.log',
-      ).toString();
-      // Check for specific welcome message
-      expect(logs).toContain(`Welcome to our platform, ${user.email}`);
-    } catch (e) {
-      console.warn('Docker exec failed or log not found yet');
-    }
-  });
+    // Verify MongoDB Notification
+    const notification = await context
+      .getMongoCollection('notifications')
+      .findOne({
+        userId: user.id,
+        message: { $regex: /Welcome to our platform/ },
+      });
+
+    console.log('[Notification Test] Found notification:', notification);
+    expect(notification).not.toBeNull();
+    expect(notification.message).toContain(user.email);
+  }, 30000);
 });

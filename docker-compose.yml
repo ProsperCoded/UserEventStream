@@ -124,7 +124,7 @@ services:
         condition: service_healthy
     environment:
       KAFKA_BROKERS: kafka:9092
-      MONGODB_URI: mongodb://user:password@mongodb:27017
+      MONGODB_URI: mongodb://user:password@mongodb:27017/user_event_stream?authSource=admin
     healthcheck:
       test:
         [
@@ -148,8 +148,11 @@ services:
     depends_on:
       kafka:
         condition: service_healthy
+      mongodb:
+        condition: service_healthy
     environment:
       KAFKA_BROKERS: kafka:9092
+      MONGODB_URI: mongodb://user:password@mongodb:27017/user_event_stream?authSource=admin
     healthcheck:
       test:
         [
@@ -175,7 +178,7 @@ services:
         condition: service_healthy
     environment:
       KAFKA_BROKERS: kafka:9092
-      MONGODB_URI: mongodb://user:password@mongodb:27017
+      MONGODB_URI: mongodb://user:password@mongodb:27017/user_event_stream?authSource=admin
     healthcheck:
       test:
         [

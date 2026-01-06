@@ -31,6 +31,26 @@ describe('Analytics E2E', () => {
       .getMongoCollection('dailyactivities')
       .findOne({ date: today });
 
+    console.log(
+      `[Analytics Test] Checking DAU for ${today}. Found:`,
+      dailyActivity ? 'Record exists' : 'NULL',
+    );
+    if (dailyActivity) {
+      console.log(
+        `[Analytics Test] Active User Count: ${dailyActivity.activeUserIds.length}`,
+      );
+    } else {
+      // List all activities to see if we have the wrong date
+      const allActivities = await context
+        .getMongoCollection('dailyactivities')
+        .find({})
+        .toArray();
+      console.log(
+        '[Analytics Test] All Daily Activities:',
+        JSON.stringify(allActivities, null, 2),
+      );
+    }
+
     expect(dailyActivity).not.toBeNull();
     // activeUserIds should track unique users.
     // Since we created >1 users, expect >1.

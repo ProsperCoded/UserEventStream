@@ -87,26 +87,24 @@ export class FraudDetectionService {
       (e) => new Date(e.occurredAt).getTime() > tenMinutesAgo,
     );
 
-    // Sort by time (should be ordered by Kafka mostly, but ensures correctness)
-    events.sort(
-      (a, b) =>
-        new Date(a.occurredAt).getTime() - new Date(b.occurredAt).getTime(),
-    );
+    // NOTE: Removed sort to preserve Kafka consumption order.
+    // Kafka guarantees order for events with the same key (userId).
+    // Sorting caused race conditions when events had identical timestamps.
 
     this.eventWindows.set(userId, events);
     return events;
   }
 
   private checkPasswordIpLoginPattern(events: UserEvent[]): boolean {
-    // Look for sequence: Password Changed -> ... -> IP Changed -> ... -> Login
-    // All within 5 minutes (last 5 mins already filtered mostly, but strict check)
-    // Actually filtering is 10 mins.
-
-    // Simple regex-like check on sorted events
-    // Indexes:
+    // Look for sequence: Password Changed -> IP Changed -> Login
+    // All within 5 minutes
+    this.logger.debug(
+      `Checking pattern for ${events.length} events: ${events.map((e) => e.eventType).join(' -> ')}`,
+    );
     const pwdIdx = events.findIndex(
       (e) => e.eventType === UserEventType.USER_PASSWORD_CHANGED,
     );
+    this.logger.debug(`Password change index: ${pwdIdx}`);
     if (pwdIdx === -1) return false;
 
     // Check events AFTER password change
@@ -123,7 +121,7 @@ export class FraudDetectionService {
     );
 
     if (loginIdx !== -1) {
-      // Validate time difference
+      // Validate time difference (within 5 minutes)
       const start = new Date(events[pwdIdx].occurredAt).getTime();
       const end = new Date(afterIp[loginIdx].occurredAt).getTime();
       return end - start <= 5 * 60 * 1000;
@@ -138,11 +136,7 @@ export class FraudDetectionService {
     );
     if (failures.length < 5) return false;
 
-    // Check strictly the last 5 failures are within 2 mins
-    // Or any window of 5 failures within 2 mins?
-    // ">=5 login failures within 2 minutes"
-
-    // Let's check sliding 2-min window
+    // Check sliding 2-min window for any 5 consecutive failures
     for (let i = 0; i <= failures.length - 5; i++) {
       const start = new Date(failures[i].occurredAt).getTime();
       const end = new Date(failures[i + 4].occurredAt).getTime();
@@ -153,11 +147,9 @@ export class FraudDetectionService {
 
   private checkIpHopping(events: UserEvent[]): boolean {
     // Multiple IP changes within short duration (3 distinct IPs in 10 mins)
-    // Filter 10 mins already done.
     const ips = new Set<string>();
     for (const e of events) {
       if (e.payload.ip) ips.add(e.payload.ip);
-      // Also check previousIp if available in USER_IP_CHANGED
       if (e.payload.previousIp) ips.add(e.payload.previousIp);
     }
     return ips.size >= 3;

@@ -31,10 +31,24 @@ describe('Fraud Detection E2E', () => {
     await new Promise((r) => setTimeout(r, 5000));
 
     // Verify Fraud Report (Score 30)
+    console.log(`[Fraud Test] Searching for fraud report for User: ${user.id}`);
     const report = await context.getMongoCollection('fraudreports').findOne({
       userId: user.id,
       reason: { $regex: /PasswordReset->IpChange->Login/ },
     });
+    console.log('[Fraud Test] Report found:', report ? 'YES' : 'NO');
+    if (report) {
+      console.log(`[Fraud Test] Risk Score: ${report.riskScore}`);
+    } else {
+      const allReports = await context
+        .getMongoCollection('fraudreports')
+        .find({ userId: user.id })
+        .toArray();
+      console.log(
+        '[Fraud Test] All reports for this user:',
+        JSON.stringify(allReports, null, 2),
+      );
+    }
     expect(report).toBeDefined();
     expect(report.riskScore).toBeGreaterThanOrEqual(30);
   }, 30000);
@@ -53,10 +67,20 @@ describe('Fraud Detection E2E', () => {
     await new Promise((r) => setTimeout(r, 5000));
 
     // Verify Fraud Report (Score 40)
+    console.log(
+      `[Fraud Test] Searching for Brute Force report for User: ${user.id}`,
+    );
     const report = await context.getMongoCollection('fraudreports').findOne({
       userId: user.id,
       reason: { $regex: /Brute Force/ },
     });
+    console.log(
+      '[Fraud Test] Brute Force Report found:',
+      report ? 'YES' : 'NO',
+    );
+    if (report) {
+      console.log(`[Fraud Test] Risk Score: ${report.riskScore}`);
+    }
     expect(report).toBeDefined();
     expect(report.riskScore).toBeGreaterThanOrEqual(40);
   }, 30000);
