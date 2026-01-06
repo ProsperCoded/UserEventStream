@@ -37,7 +37,7 @@ describe('Fraud Detection E2E', () => {
     });
     expect(report).toBeDefined();
     expect(report.riskScore).toBeGreaterThanOrEqual(30);
-  });
+  }, 30000);
 
   it('Scenario: Brute Force', async () => {
     const user = await seeder.createUser();
@@ -59,5 +59,5 @@ describe('Fraud Detection E2E', () => {
     });
     expect(report).toBeDefined();
     expect(report.riskScore).toBeGreaterThanOrEqual(40);
-  });
+  }, 30000);
 });

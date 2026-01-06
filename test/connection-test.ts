@@ -3,7 +3,8 @@ import mongoose from 'mongoose';
 
 const POSTGRES_CONN =
   'postgres://user:password@localhost:5433/user_event_stream';
-const MONGO_URI = 'mongodb://user:password@localhost:27017/user_event_stream';
+const MONGO_URI =
+  'mongodb://user:password@localhost:27017/user_event_stream?authSource=admin';
 
 async function testPostgres() {
   console.log('\n🔍 Testing PostgreSQL Connection...');

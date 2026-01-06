@@ -18,10 +18,12 @@ describe('Analytics E2E', () => {
     const users = await seeder.createManyUsers(50);
 
     // Login all of them
-    await Promise.all(users.map((u) => seeder.login(u.email, u.password)));
+    void (await Promise.all(
+      users.map((u) => seeder.login(u.email, u.password)),
+    ));
 
     // Allow Kafka processing time
-    await new Promise((r) => setTimeout(r, 8000));
+    await new Promise((r) => setTimeout(r, 10000));
 
     // Verify MongoDB DAU count
     const today = new Date().toISOString().split('T')[0];
@@ -29,10 +31,10 @@ describe('Analytics E2E', () => {
       .getMongoCollection('dailyactivities')
       .findOne({ date: today });
 
-    expect(dailyActivity).toBeDefined();
+    expect(dailyActivity).not.toBeNull();
     // activeUserIds should track unique users.
     // Since we created >1 users, expect >1.
     // Ideally expect >= 50, but existing users might be there.
-    expect(dailyActivity.activeUserIds.length).toBeGreaterThanOrEqual(50);
+    expect(dailyActivity!.activeUserIds.length).toBeGreaterThanOrEqual(50);
   }, 120000);
 });

@@ -17,7 +17,7 @@ describe('User Flow E2E', () => {
     const user = await seeder.createUser();
 
     // Verify Postgres
-    const res = await context.pgClient.query(
+    const res = await context.queryPostgres(
       'SELECT * FROM users WHERE id = $1',
       [user.id],
     );
@@ -26,7 +26,7 @@ describe('User Flow E2E', () => {
 
   it('should allow login and session tracking', async () => {
     const user = await seeder.createUser();
-    const loginRes = await seeder.login(user.email, user.password);
-    expect(loginRes.userId).toBe(user.id);
+    const { userId } = await seeder.login(user.email, user.password);
+    expect(userId).toBe(user.id);
   });
 });

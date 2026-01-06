@@ -1,0 +1,81 @@
+﻿
+> user-event-stream-platform@0.0.1 test:e2e C:\Users\HELLO\Desktop\workspace\Playground\UserEventStream
+> jest --config ./test/jest-e2e.json "--verbose"
+
+node.exe : FAIL test/02-analytics.e2e-spec.ts (14.372 s)
+At C:\Users\HELLO\AppData\Roaming\npm\pnpm.ps1:24 char:5
++     & "node$exe"  "$basedir/node_modules/pnpm/bin/pnpm.cjs" 
+$args
++     
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (FAIL test/02-an...c 
+   .ts (14.372 s):String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+  Analytics E2E
+    ├ù should track Daily Active Users (DAU) (12 ms)
+
+  ΓùÅ Analytics E2E ΓÇ║ should track Daily Active Users (DAU)
+
+    AggregateError:
+
+
+
+FAIL test/03-fraud.e2e-spec.ts (14.544 s)
+  Fraud Detection E2E
+    ├ù Scenario: Password Change -> IP Change -> Login 
+(Compromised Account) (17 ms)
+    ├ù Scenario: Brute Force (1 ms)
+
+  ΓùÅ Fraud Detection E2E ΓÇ║ Scenario: Password Change -> IP 
+Change -> Login (Compromised Account)
+
+    AggregateError:
+
+
+
+  ΓùÅ Fraud Detection E2E ΓÇ║ Scenario: Brute Force
+
+    AggregateError:
+
+
+
+PASS test/app.e2e-spec.ts (14.486 s)
+  AppController (e2e)
+    ΓêÜ / (GET) (1051 ms)
+
+FAIL test/04-notification.e2e-spec.ts (14.555 s)
+  Notification E2E
+    ├ù should send Welcome notification on Signup (10 ms)
+
+  ΓùÅ Notification E2E ΓÇ║ should send Welcome notification on 
+Signup
+
+    AggregateError:
+
+
+
+FAIL test/01-user-flow.e2e-spec.ts (14.604 s)
+  User Flow E2E
+    ├ù should allow user signup and data persistence (10 ms)
+    ├ù should allow login and session tracking
+
+  ΓùÅ User Flow E2E ΓÇ║ should allow user signup and data 
+persistence
+
+    AggregateError:
+
+
+
+  ΓùÅ User Flow E2E ΓÇ║ should allow login and session tracking
+
+    AggregateError:
+
+
+
+Test Suites: 4 failed, 1 passed, 5 total
+Tests:       6 failed, 1 passed, 7 total
+Snapshots:   0 total
+Time:        16.945 s
+Ran all test suites.
+ΓÇëELIFECYCLEΓÇë Command failed with exit code 1.

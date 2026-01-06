@@ -1,4 +1,4 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
 import {
   EventPattern,
   Payload,
@@ -18,5 +18,10 @@ export class NotificationServiceController {
     // Idempotency check could be here or service.
     // context.getMessage().offset could be logged.
     await this.notificationService.processEvent(event);
+  }
+
+  @Get('health')
+  health() {
+    return { status: 'ok' };
   }
 }

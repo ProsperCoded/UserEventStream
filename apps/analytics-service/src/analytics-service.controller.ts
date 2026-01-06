@@ -1,4 +1,4 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
 import { EventPattern, Payload } from '@nestjs/microservices';
 import { AnalyticsService } from './analytics-service.service';
 import { UserEvent } from '@app/shared';
@@ -17,5 +17,10 @@ export class AnalyticsServiceController {
     // Standard NestJS Kafka deserializer returns the message value.
     const event = message as UserEvent;
     await this.analyticsService.processEvent(event);
+  }
+
+  @Get('health')
+  health() {
+    return { status: 'ok' };
   }
 }

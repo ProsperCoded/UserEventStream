@@ -1,4 +1,4 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
 import { EventPattern, Payload } from '@nestjs/microservices';
 import { FraudDetectionService } from './fraud-detection-service.service';
 import { UserEvent } from '@app/shared';
@@ -14,7 +14,11 @@ export class FraudDetectionServiceController {
     // But producer-api emits user events.
     // We emit user.flagged/suspended.
     // If we process user.flagged, we might loop? No, our logic tracks PATTERNS.
-    // We should ignore events emitted by ourselves if they don't contribute to risk aggregation logic (e.g. user.flagged is an outcome).
     await this.fraudService.processEvent(event);
+  }
+
+  @Get('health')
+  health() {
+    return { status: 'ok' };
   }
 }

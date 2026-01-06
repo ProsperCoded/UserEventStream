@@ -1,0 +1,155 @@
+﻿node.exe :   console.error
+At line:1 char:1
++ & "C:\Program Files\nodejs/node.exe" "C:\Program 
+Files\nodejs/node_mo ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~
+    + CategoryInfo          : NotSpecified: (  console.error:Str 
+   ing) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+    Create User API Error: {
+      message: 'Failed query: insert into "users" ("id", 
+"email", "password_hash", "last_ip_address", "status", 
+"created_at") values (default, $1, $2, default, $3, default) 
+returning "id", "email", "password_hash", "last_ip_address", 
+"status", "created_at"\n' +
+        'params: 
+Christ.Grant52@gmail.com,UFJs6enoDyfDFW2,active',
+      error: 'Internal Server Error',
+      statusCode: 500
+    }
+
+    [0m [90m 15 |[39m       [36mreturn[39m { id[33m:[39m 
+res[33m.[39mdata[33m.[39mid[33m,[39m email[33m:[39m 
+userEmail[33m,[39m password }[33m;[39m
+     [90m 16 |[39m     } [36mcatch[39m (e[33m:[39m any) {
+    [31m[1m>[22m[39m[90m 17 |[39m       
+console[33m.[39merror([32m'Create User API 
+Error:'[39m[33m,[39m 
+e[33m.[39mresponse[33m?[39m[33m.[39mdata [33m||[39m 
+e[33m.[39mmessage)[33m;[39m
+     [90m    |[39m               [31m[1m^[22m[39m
+     [90m 18 |[39m       [90m// Sanitize error to avoid 
+circular reference (req -> res -> req)[39m
+     [90m 19 |[39m       [36mconst[39m sanitizedError 
+[33m=[39m [36mnew[39m [33mError[39m(
+     [90m 20 |[39m         e[33m.[39mresponse[33m?[39m[33m
+.[39mdata[33m?[39m[33m.[39mmessage [33m||[39m 
+e[33m.[39mmessage [33m||[39m [32m'Create user 
+failed'[39m[33m,[39m[0m
+
+      at SmartSeeder.createUser (utils/smart-seed.ts:17:15)
+      at Object.<anonymous> (01-user-flow.e2e-spec.ts:17:18)
+
+  console.error
+    Create User API Error: {
+      message: 'Failed query: insert into "users" ("id", 
+"email", "password_hash", "last_ip_address", "status", 
+"created_at") values (default, $1, $2, default, $3, default) 
+returning "id", "email", "password_hash", "last_ip_address", 
+"status", "created_at"\n' +
+        'params: 
+Shana.Romaguera98@hotmail.com,_i9hdaGZ0_1X43l,active',
+      error: 'Internal Server Error',
+      statusCode: 500
+    }
+
+    [0m [90m 15 |[39m       [36mreturn[39m { id[33m:[39m 
+res[33m.[39mdata[33m.[39mid[33m,[39m email[33m:[39m 
+userEmail[33m,[39m password }[33m;[39m
+     [90m 16 |[39m     } [36mcatch[39m (e[33m:[39m any) {
+    [31m[1m>[22m[39m[90m 17 |[39m       
+console[33m.[39merror([32m'Create User API 
+Error:'[39m[33m,[39m 
+e[33m.[39mresponse[33m?[39m[33m.[39mdata [33m||[39m 
+e[33m.[39mmessage)[33m;[39m
+     [90m    |[39m               [31m[1m^[22m[39m
+     [90m 18 |[39m       [90m// Sanitize error to avoid 
+circular reference (req -> res -> req)[39m
+     [90m 19 |[39m       [36mconst[39m sanitizedError 
+[33m=[39m [36mnew[39m [33mError[39m(
+     [90m 20 |[39m         e[33m.[39mresponse[33m?[39m[33m
+.[39mdata[33m?[39m[33m.[39mmessage [33m||[39m 
+e[33m.[39mmessage [33m||[39m [32m'Create user 
+failed'[39m[33m,[39m[0m
+
+      at SmartSeeder.createUser (utils/smart-seed.ts:17:15)
+      at Object.<anonymous> (01-user-flow.e2e-spec.ts:28:18)
+
+FAIL test/01-user-flow.e2e-spec.ts (15.945 s)
+  User Flow E2E
+    ├ù should allow user signup and data persistence (448 ms)
+    ├ù should allow login and session tracking (118 ms)
+
+  ΓùÅ User Flow E2E ΓÇ║ should allow user signup and data 
+persistence
+
+    Failed query: insert into "users" ("id", "email", 
+"password_hash", "last_ip_address", "status", "created_at") 
+values (default, $1, $2, default, $3, default) returning "id", 
+"email", "password_hash", "last_ip_address", "status", 
+"created_at"
+    params: Christ.Grant52@gmail.com,UFJs6enoDyfDFW2,active
+
+    [0m [90m 17 |[39m       
+console[33m.[39merror([32m'Create User API 
+Error:'[39m[33m,[39m 
+e[33m.[39mresponse[33m?[39m[33m.[39mdata [33m||[39m 
+e[33m.[39mmessage)[33m;[39m
+     [90m 18 |[39m       [90m// Sanitize error to avoid 
+circular reference (req -> res -> req)[39m
+    [31m[1m>[22m[39m[90m 19 |[39m       [36mconst[39m 
+sanitizedError [33m=[39m [36mnew[39m [33mError[39m(
+     [90m    |[39m                              
+[31m[1m^[22m[39m
+     [90m 20 |[39m         e[33m.[39mresponse[33m?[39m[33m
+.[39mdata[33m?[39m[33m.[39mmessage [33m||[39m 
+e[33m.[39mmessage [33m||[39m [32m'Create user 
+failed'[39m[33m,[39m
+     [90m 21 |[39m       )[33m;[39m
+     [90m 22 |[39m       (sanitizedError [36mas[39m 
+any)[33m.[39mstatus [33m=[39m 
+e[33m.[39mresponse[33m?[39m[33m.[39mstatus[33m;[39m[0m
+
+      at SmartSeeder.createUser (utils/smart-seed.ts:19:30)
+      at Object.<anonymous> (01-user-flow.e2e-spec.ts:17:18)
+
+  ΓùÅ User Flow E2E ΓÇ║ should allow login and session tracking
+
+    Failed query: insert into "users" ("id", "email", 
+"password_hash", "last_ip_address", "status", "created_at") 
+values (default, $1, $2, default, $3, default) returning "id", 
+"email", "password_hash", "last_ip_address", "status", 
+"created_at"
+    params: Shana.Romaguera98@hotmail.com,_i9hdaGZ0_1X43l,active
+
+    [0m [90m 17 |[39m       
+console[33m.[39merror([32m'Create User API 
+Error:'[39m[33m,[39m 
+e[33m.[39mresponse[33m?[39m[33m.[39mdata [33m||[39m 
+e[33m.[39mmessage)[33m;[39m
+     [90m 18 |[39m       [90m// Sanitize error to avoid 
+circular reference (req -> res -> req)[39m
+    [31m[1m>[22m[39m[90m 19 |[39m       [36mconst[39m 
+sanitizedError [33m=[39m [36mnew[39m [33mError[39m(
+     [90m    |[39m                              
+[31m[1m^[22m[39m
+     [90m 20 |[39m         e[33m.[39mresponse[33m?[39m[33m
+.[39mdata[33m?[39m[33m.[39mmessage [33m||[39m 
+e[33m.[39mmessage [33m||[39m [32m'Create user 
+failed'[39m[33m,[39m
+     [90m 21 |[39m       )[33m;[39m
+     [90m 22 |[39m       (sanitizedError [36mas[39m 
+any)[33m.[39mstatus [33m=[39m 
+e[33m.[39mresponse[33m?[39m[33m.[39mstatus[33m;[39m[0m
+
+      at SmartSeeder.createUser (utils/smart-seed.ts:19:30)
+      at Object.<anonymous> (01-user-flow.e2e-spec.ts:28:18)
+
+Test Suites: 1 failed, 1 total
+Tests:       2 failed, 2 total
+Snapshots:   0 total
+Time:        16.974 s, estimated 22 s
+Ran all test suites matching /01-user-flow/i.
+{"numFailedTestSuites":1,"numFailedTests":2,"numPassedTestSuites":0,"numPassedTests":0,"numPendingTestSuites":0,"numPendingTests":0,"numRuntimeErrorTestSuites":0,"numTodoTests":0,"numTotalTestSuites":1,"numTotalTests":2,"openHandles":[],"snapshot":{"added":0,"didUpdate":false,"failure":false,"filesAdded":0,"filesRemoved":0,"filesRemovedList":[],"filesUnmatched":0,"filesUpdated":0,"matched":0,"total":0,"unchecked":0,"uncheckedKeysByFile":[],"unmatched":0,"updated":0},"startTime":1767725512374,"success":false,"testResults":[{"assertionResults":[{"ancestorTitles":["User Flow E2E"],"duration":448,"failureDetails":[{"status":500,"data":{"message":"Failed query: insert into \"users\" (\"id\", \"email\", \"password_hash\", \"last_ip_address\", \"status\", \"created_at\") values (default, $1, $2, default, $3, default) returning \"id\", \"email\", \"password_hash\", \"last_ip_address\", \"status\", \"created_at\"\nparams: Christ.Grant52@gmail.com,UFJs6enoDyfDFW2,active","error":"Internal Server Error","statusCode":500}}],"failureMessages":["Error: Failed query: insert into \"users\" (\"id\", \"email\", \"password_hash\", \"last_ip_address\", \"status\", \"created_at\") values (default, $1, $2, default, $3, default) returning \"id\", \"email\", \"password_hash\", \"last_ip_address\", \"status\", \"created_at\"\nparams: Christ.Grant52@gmail.com,UFJs6enoDyfDFW2,active\n    at SmartSeeder.createUser (C:\\Users\\HELLO\\Desktop\\workspace\\Playground\\UserEventStream\\test\\utils\\smart-seed.ts:19:30)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at Object.<anonymous> (C:\\Users\\HELLO\\Desktop\\workspace\\Playground\\UserEventStream\\test\\01-user-flow.e2e-spec.ts:17:18)"],"fullName":"User Flow E2E should allow user signup and data persistence","invocations":1,"location":null,"numPassingAsserts":0,"retryReasons":[],"status":"failed","title":"should allow user signup and data persistence"},{"ancestorTitles":["User Flow E2E"],"duration":118,"failureDetails":[{"status":500,"data":{"message":"Failed query: insert into \"users\" (\"id\", \"email\", \"password_hash\", \"last_ip_address\", \"status\", \"created_at\") values (default, $1, $2, default, $3, default) returning \"id\", \"email\", \"password_hash\", \"last_ip_address\", \"status\", \"created_at\"\nparams: Shana.Romaguera98@hotmail.com,_i9hdaGZ0_1X43l,active","error":"Internal Server Error","statusCode":500}}],"failureMessages":["Error: Failed query: insert into \"users\" (\"id\", \"email\", \"password_hash\", \"last_ip_address\", \"status\", \"created_at\") values (default, $1, $2, default, $3, default) returning \"id\", \"email\", \"password_hash\", \"last_ip_address\", \"status\", \"created_at\"\nparams: Shana.Romaguera98@hotmail.com,_i9hdaGZ0_1X43l,active\n    at SmartSeeder.createUser (C:\\Users\\HELLO\\Desktop\\workspace\\Playground\\UserEventStream\\test\\utils\\smart-seed.ts:19:30)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at Object.<anonymous> (C:\\Users\\HELLO\\Desktop\\workspace\\Playground\\UserEventStream\\test\\01-user-flow.e2e-spec.ts:28:18)"],"fullName":"User Flow E2E should allow login and session tracking","invocations":1,"location":null,"numPassingAsserts":0,"retryReasons":[],"status":"failed","title":"should allow login and session tracking"}],"endTime":1767725529327,"message":"  ΓùÅ User Flow E2E ΓÇ║ should allow user signup and data persistence\n\n    Failed query: insert into \"users\" (\"id\", \"email\", \"password_hash\", \"last_ip_address\", \"status\", \"created_at\") values (default, $1, $2, default, $3, default) returning \"id\", \"email\", \"password_hash\", \"last_ip_address\", \"status\", \"created_at\"\n    params: Christ.Grant52@gmail.com,UFJs6enoDyfDFW2,active\n\n    \u001b[0m \u001b[90m 17 |\u001b[39m       console\u001b[33m.\u001b[39merror(\u001b[32m'Create User API Error:'\u001b[39m\u001b[33m,\u001b[39m e\u001b[33m.\u001b[39mresponse\u001b[33m?\u001b[39m\u001b[33m.\u001b[39mdata \u001b[33m||\u001b[39m e\u001b[33m.\u001b[39mmessage)\u001b[33m;\u001b[39m\n     \u001b[90m 18 |\u001b[39m       \u001b[90m// Sanitize error to avoid circular reference (req -> res -> req)\u001b[39m\n    \u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 19 |\u001b[39m       \u001b[36mconst\u001b[39m sanitizedError \u001b[33m=\u001b[39m \u001b[36mnew\u001b[39m \u001b[33mError\u001b[39m(\n     \u001b[90m    |\u001b[39m                              \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n     \u001b[90m 20 |\u001b[39m         e\u001b[33m.\u001b[39mresponse\u001b[33m?\u001b[39m\u001b[33m.\u001b[39mdata\u001b[33m?\u001b[39m\u001b[33m.\u001b[39mmessage \u001b[33m||\u001b[39m e\u001b[33m.\u001b[39mmessage \u001b[33m||\u001b[39m \u001b[32m'Create user failed'\u001b[39m\u001b[33m,\u001b[39m\n     \u001b[90m 21 |\u001b[39m       )\u001b[33m;\u001b[39m\n     \u001b[90m 22 |\u001b[39m       (sanitizedError \u001b[36mas\u001b[39m any)\u001b[33m.\u001b[39mstatus \u001b[33m=\u001b[39m e\u001b[33m.\u001b[39mresponse\u001b[33m?\u001b[39m\u001b[33m.\u001b[39mstatus\u001b[33m;\u001b[39m\u001b[0m\n\n      at SmartSeeder.createUser (utils/smart-seed.ts:19:30)\n      at Object.<anonymous> (01-user-flow.e2e-spec.ts:17:18)\n\n  ΓùÅ User Flow E2E ΓÇ║ should allow login and session tracking\n\n    Failed query: insert into \"users\" (\"id\", \"email\", \"password_hash\", \"last_ip_address\", \"status\", \"created_at\") values (default, $1, $2, default, $3, default) returning \"id\", \"email\", \"password_hash\", \"last_ip_address\", \"status\", \"created_at\"\n    params: Shana.Romaguera98@hotmail.com,_i9hdaGZ0_1X43l,active\n\n    \u001b[0m \u001b[90m 17 |\u001b[39m       console\u001b[33m.\u001b[39merror(\u001b[32m'Create User API Error:'\u001b[39m\u001b[33m,\u001b[39m e\u001b[33m.\u001b[39mresponse\u001b[33m?\u001b[39m\u001b[33m.\u001b[39mdata \u001b[33m||\u001b[39m e\u001b[33m.\u001b[39mmessage)\u001b[33m;\u001b[39m\n     \u001b[90m 18 |\u001b[39m       \u001b[90m// Sanitize error to avoid circular reference (req -> res -> req)\u001b[39m\n    \u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 19 |\u001b[39m       \u001b[36mconst\u001b[39m sanitizedError \u001b[33m=\u001b[39m \u001b[36mnew\u001b[39m \u001b[33mError\u001b[39m(\n     \u001b[90m    |\u001b[39m                              \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n     \u001b[90m 20 |\u001b[39m         e\u001b[33m.\u001b[39mresponse\u001b[33m?\u001b[39m\u001b[33m.\u001b[39mdata\u001b[33m?\u001b[39m\u001b[33m.\u001b[39mmessage \u001b[33m||\u001b[39m e\u001b[33m.\u001b[39mmessage \u001b[33m||\u001b[39m \u001b[32m'Create user failed'\u001b[39m\u001b[33m,\u001b[39m\n     \u001b[90m 21 |\u001b[39m       )\u001b[33m;\u001b[39m\n     \u001b[90m 22 |\u001b[39m       (sanitizedError \u001b[36mas\u001b[39m any)\u001b[33m.\u001b[39mstatus \u001b[33m=\u001b[39m e\u001b[33m.\u001b[39mresponse\u001b[33m?\u001b[39m\u001b[33m.\u001b[39mstatus\u001b[33m;\u001b[39m\u001b[0m\n\n      at SmartSeeder.createUser (utils/smart-seed.ts:19:30)\n      at Object.<anonymous> (01-user-flow.e2e-spec.ts:28:18)\n","name":"C:\\Users\\HELLO\\Desktop\\workspace\\Playground\\UserEventStream\\test\\01-user-flow.e2e-spec.ts","startTime":1767725513382,"status":"failed","summary":""}],"wasInterrupted":false}

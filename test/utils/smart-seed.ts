@@ -15,7 +15,13 @@ export class SmartSeeder {
       return { id: res.data.id, email: userEmail, password };
     } catch (e: any) {
       console.error('Create User API Error:', e.response?.data || e.message);
-      throw e;
+      // Sanitize error to avoid circular reference (req -> res -> req)
+      const sanitizedError = new Error(
+        e.response?.data?.message || e.message || 'Create user failed',
+      );
+      (sanitizedError as any).status = e.response?.status;
+      (sanitizedError as any).data = e.response?.data;
+      throw sanitizedError;
     }
   }
 
@@ -39,7 +45,13 @@ export class SmartSeeder {
       });
       return res.data;
     } catch (e: any) {
-      throw e; // Check caller for handling 401/404
+      // Sanitize error to avoid circular reference (req -> res -> req)
+      const sanitizedError = new Error(
+        e.response?.data?.message || e.message || 'Login failed',
+      );
+      (sanitizedError as any).status = e.response?.status;
+      (sanitizedError as any).data = e.response?.data;
+      throw sanitizedError;
     }
   }
 
